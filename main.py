@@ -1,20 +1,40 @@
+import argparse
 
 from analyzer import most_active_authors, commit_messages
 from models import Commit
 
-commits = [
+def main():
+
+    parser = argparse.ArgumentParser(description='Analyze commits stats')
+
+    parser.add_argument(
+        "--top",
+        type=int,
+        default=3,
+        help="Number of top contributors to show"
+    )
+
+    args = parser.parse_args()
+
+    commits = [
     Commit("Sasha", "Initial commit"),
     Commit("Bob", "Bug fix"),
     Commit("Daniel", "Says hellp"),
-]
+    Commit("Sasha", "Pro max"),
+    ]
 
-top = most_active_authors(commits)
+    top = most_active_authors(commits, args.top)
 
-print("Top contributors:")
+    top_authors = [author for author, _ in top]
 
-for author, count in top:
-    print(author, count)
+    print("Top contributors:")
 
-print("\nCommit messages:")
-for message in commit_messages(commits):
-    print(message)
+    for author, count in top:
+        print(author, count)
+
+    print("\nCommit messages:")
+    for message in commit_messages(commits, top_authors):
+        print(author, message)
+
+if __name__ == "__main__":
+    main()
