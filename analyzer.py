@@ -1,7 +1,11 @@
 from collections import Counter
 from models import Commit
 from utils import meassure_time
+from functools import lru_cache
 
+@lru_cache(maxsize=32)
+def count_author(author: str, authors: tuple[str]):
+    return authors.count(author)
 
 @meassure_time
 def most_active_authors(commits : list[Commit], n: int):
