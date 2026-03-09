@@ -9,10 +9,11 @@ def main():
 
     parser = argparse.ArgumentParser(description="Analyze commit stats")
 
-    parser.add_argument("--top", type=int, default=3)
-    parser.add_argument("--author", type=str)
-    parser.add_argument("--file", type=str, default="commits.json")
-    parser.add_argument("--repo", type=str)
+    parser.add_argument("--top", type=int, default=3, help="Number of top contributors")
+    parser.add_argument("--author", type=str, nargs="*", help="Commit authors")
+    parser.add_argument("--file", type=str, default="commits.json", help="Commit file")
+    parser.add_argument("--repo", type=str, help="Repository name")
+    parser.add_argument("--limit", type=int, default=50, help="Number of commits to fetch")
 
     args = parser.parse_args()
 
@@ -36,6 +37,8 @@ def main():
         authors = [args.author]
     else:
         authors = [author for author, _ in top]
+
+    commits = fetch_commits(owner, repo, args.limit)
 
     print("\nCommit messages:")
 
